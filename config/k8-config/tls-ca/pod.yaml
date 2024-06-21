@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tls-ca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: tls-ca
+  template:
+    metadata:
+      labels:
+        deployment: tls-ca
+        service: tls-ca
+    spec:
+      containers:
+        - name: tls-ca-container
+          image: hyperledger/fabric-ca
+          volumeMounts:
+            - name: tls-ca-volume
+              mountPath: "/etc/hyperledger/fabric-ca-server"
+      volumes:
+        - name: tls-ca-volume
+          hostPath:
+            path: /mnt/c/Users/psousaesilva/Documents/blockchain-identity-project/config/storage/tls-ca

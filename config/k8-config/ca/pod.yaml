@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: ca
+  template:
+    metadata:
+      labels:
+        deployment: ca
+        service: ca
+    spec:
+      containers:
+        - name: ca-container
+          image: hyperledger/fabric-ca
+          volumeMounts:
+            - name: ca-volume
+              mountPath: "/etc/hyperledger/fabric-ca-server"
+      volumes:
+        - name: ca-volume
+          hostPath:
+            path: /mnt/c/Users/psousaesilva/Documents/blockchain-identity-project/config/storage/ca
