@@ -35,10 +35,10 @@ if [[ ! -d ../crypto/${MACHINE_IP}/msp/${CN} ]];
 then
 echo "Registing and Enrolling the component msp.."
 #? Register the component msp
-./fabric-ca-client register -d -u http://${CA_IP_ADDRESS} --id.name $CN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $CN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ./adm.msp/msp
+fabric-ca-client register -d -u http://${CA_IP_ADDRESS} --id.name $CN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $CN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ./adm.msp/msp
 wait
 #? Enroll the component msp
-./fabric-ca-client enroll -d -u http://${CN}:${PASSWORD}@${CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $CN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ../crypto/${MACHINE_IP}/msp/${CN}
+fabric-ca-client enroll -d -u http://${CN}:${PASSWORD}@${CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $CN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ../crypto/${MACHINE_IP}/msp/${CN}
 wait
 #? Renaming the private key
 for file in ../crypto/${MACHINE_IP}/msp/${CN}/keystore/*; do
@@ -58,10 +58,10 @@ if [[ ! -d ../crypto/${MACHINE_IP}/tls-msp/${CN} ]];
 then
 echo "Registing and Enrolling the component tls-msp.."
 #? Register the component tls-msp
-./fabric-ca-client register -d -u http://${TLS_CA_IP_ADDRESS}  --id.name $CN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $CN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ./adm.msp/tls-msp/
+fabric-ca-client register -d -u http://${TLS_CA_IP_ADDRESS}  --id.name $CN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $CN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ./adm.msp/tls-msp/
 wait
 #? Enroll the component tls-msp
-./fabric-ca-client enroll -d -u http://${CN}:${PASSWORD}@${TLS_CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $CN  --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}"  --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}"  --enrollment.profile tls --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ../crypto/${MACHINE_IP}/tls-msp/${CN}
+fabric-ca-client enroll -d -u http://${CN}:${PASSWORD}@${TLS_CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $CN  --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}"  --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}"  --enrollment.profile tls --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ../crypto/${MACHINE_IP}/tls-msp/${CN}
 #? Renaming the private key
 for file in ../crypto/${MACHINE_IP}/tls-msp/${CN}/keystore/*; do
 mv "$file" "../crypto/${MACHINE_IP}/tls-msp/${CN}/keystore/key.pem" 
@@ -80,10 +80,10 @@ if [[ ! -d ../crypto/${MACHINE_IP}/msp/${ORGN} ]];
 then
     echo "The organization msp does not exist, lets create it..."
 #? Register the component msp
-./fabric-ca-client register -d -u http://${CA_IP_ADDRESS}  --id.name $ORGN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $ORGN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ./adm.msp/msp
+fabric-ca-client register -d -u http://${CA_IP_ADDRESS}  --id.name $ORGN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $ORGN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ./adm.msp/msp
 wait
 #? Enroll the component msp
-./fabric-ca-client enroll -d -u http://${ORGN}:${PASSWORD}@${CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $ORGN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ../crypto/${MACHINE_IP}/msp/${ORGN}
+fabric-ca-client enroll -d -u http://${ORGN}:${PASSWORD}@${CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $ORGN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/carroot.cert --mspdir ../crypto/${MACHINE_IP}/msp/${ORGN}
 wait
 #? Renaming the private key
 for file in ../crypto/${MACHINE_IP}/msp/${ORGN}/keystore/*; do
@@ -103,10 +103,10 @@ if [[ ! -d ../crypto/${MACHINE_IP}/tls-msp/${ORGN} ]];
 then
 echo "Registing and Enrolling the component tls-msp.."
 #? Register the component tls-msp
-./fabric-ca-client register -d -u http://${TLS_CA_IP_ADDRESS}  --id.name $ORGN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $ORGN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ./adm.msp/tls-msp/
+fabric-ca-client register -d -u http://${TLS_CA_IP_ADDRESS}  --id.name $ORGN --id.secret $PASSWORD --id.type $COMPONENT_TYPE --csr.cn $ORGN --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}" --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}" --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ./adm.msp/tls-msp/
 wait
 #? Enroll the component tls-msp
-./fabric-ca-client enroll -d -u http://${ORGN}:${PASSWORD}@${TLS_CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $ORGN  --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}"  --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}"  --enrollment.profile tls --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ../crypto/${MACHINE_IP}/tls-msp/${ORGN}
+fabric-ca-client enroll -d -u http://${ORGN}:${PASSWORD}@${TLS_CA_IP_ADDRESS} --id.type $COMPONENT_TYPE --csr.cn $ORGN  --csr.names "C=${COUNTRY},ST=${STATE},L=${LOCATION},O=${ORGANIZATION}"  --csr.hosts "${MACHINE_IP},localhost,${CN},${GENERAL_IP_ADDRESS_SERVICE}"  --enrollment.profile tls --tls.certfiles ./root.tls.cert/tlsroot.cert --mspdir ../crypto/${MACHINE_IP}/tls-msp/${ORGN}
 #? Renaming the private key
 for file in ../crypto/${MACHINE_IP}/tls-msp/${ORGN}/keystore/*; do
 mv "$file" "../crypto/${MACHINE_IP}/tls-msp/${ORGN}/keystore/key.pem" 

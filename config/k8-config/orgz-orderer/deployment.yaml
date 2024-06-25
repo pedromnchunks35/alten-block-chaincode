@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orgz-orderer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: orgz-orderer
+  template:
+    metadata:
+      labels:
+        deployment: orgz-orderer
+        service: orgz-orderer
+        general: all-orderers
+    spec:
+      containers:
+        - name: orgz-orderer-container
+          image: hyperledger/fabric-orderer
+          env:
+            - name: FABRIC_CFG_PATH
+              value: "/tmp/hyperledger/orgz-orderer/config"
+          volumeMounts:
+            - mountPath: "/tmp/hyperledger/orgz-orderer/"
+              name: orgz-orderer-volume
+        - name: orgz-orderer-grpc-automation-container
+          image: pedrosilvamnchunks/orderer-grpc:latest
+          env:
+            - name: FABRIC_CFG_PATH
+              value: "/tmp/hyperledger/orgz-orderer/config"
+          volumeMounts:
+            - mountPath: "/tmp/hyperledger/orgz-orderer/"
+              name: orgz-orderer-volume
+      volumes:
+        - name: orgz-orderer-volume
+          persistentVolumeClaim:
+            claimName: pvc-orgz-orderer

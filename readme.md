@@ -17,19 +17,21 @@
     - orgy-couch-peer1
     - orgz-orderer (single orderer algorithm)
 - We will try to apply a load balancer so it gets simpler
-## Windows (garbadge) check of ports
+# Install kubernetes
+- Install the following
+  - docker
+  - cri-dockerd
+  - kubernetes
+  - kubelet
+  - kubectl
+- After cluster running install the following
+  - Calico network plugin
+    - Install by manifest
+    - Change the "CALICO_IPV4POOL_CIDR" to "10.244.0.0/16"
+# Run the cluster
 ```
-Test-NetConnection -ComputerName localhost -Port 30007
-
-
-output:
-WARNING: TCP connect to (::1 : 30007) failed
-
-
-ComputerName     : localhost
-RemoteAddress    : 127.0.0.1
-RemotePort       : 30007
-InterfaceAlias   : Loopback Pseudo-Interface 1
-SourceAddress    : 127.0.0.1
-TcpTestSucceeded : True
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=IPV4 --control-plane-endpoint=IPV4 --cri-socket=unix:///var/run/cri-dockerd.sock
 ```
+# Configs you must do
+- Since you prob are running this in another machine you should change the pv's (the volume and the name of the node for the nodeaffinity to match) inside of each config file in the k8-config section
+- Also ca's and tls-ca's require their volume to be changed

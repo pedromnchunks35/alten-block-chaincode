@@ -1,0 +1,51 @@
+=============== Jun 25, 2024 (UTC) ===============
+14:34:45.990160 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:34:45.993633 db@open opening
+14:34:45.993761 version@stat F·[] S·0B[] Sc·[]
+14:34:45.994765 db@janitor F·2 G·0
+14:34:45.994777 db@open done T·1.134109ms
+=============== Jun 25, 2024 (UTC) ===============
+14:35:44.770992 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:35:44.771255 version@stat F·[] S·0B[] Sc·[]
+14:35:44.771307 db@open opening
+14:35:44.771414 journal@recovery F·1
+14:35:44.772133 journal@recovery recovering @1
+14:35:44.772940 version@stat F·[] S·0B[] Sc·[]
+14:35:44.778775 db@janitor F·2 G·0
+14:35:44.778814 db@open done T·7.491818ms
+=============== Jun 25, 2024 (UTC) ===============
+14:36:23.028263 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:36:23.028349 version@stat F·[] S·0B[] Sc·[]
+14:36:23.028366 db@open opening
+14:36:23.028406 journal@recovery F·1
+14:36:23.028689 journal@recovery recovering @2
+14:36:23.029048 version@stat F·[] S·0B[] Sc·[]
+14:36:23.034337 db@janitor F·2 G·0
+14:36:23.034353 db@open done T·5.980454ms
+=============== Jun 25, 2024 (UTC) ===============
+14:37:17.876425 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:37:17.876602 version@stat F·[] S·0B[] Sc·[]
+14:37:17.876633 db@open opening
+14:37:17.876706 journal@recovery F·1
+14:37:17.877203 journal@recovery recovering @4
+14:37:17.877828 version@stat F·[] S·0B[] Sc·[]
+14:37:17.884811 db@janitor F·2 G·0
+14:37:17.884846 db@open done T·8.198661ms
+=============== Jun 25, 2024 (UTC) ===============
+14:38:23.002958 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:38:23.003355 version@stat F·[] S·0B[] Sc·[]
+14:38:23.003376 db@open opening
+14:38:23.003420 journal@recovery F·1
+14:38:23.003694 journal@recovery recovering @6
+14:38:23.004102 version@stat F·[] S·0B[] Sc·[]
+14:38:23.009632 db@janitor F·2 G·0
+14:38:23.009651 db@open done T·6.267508ms
+=============== Jun 25, 2024 (UTC) ===============
+14:39:43.037355 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:39:43.037426 version@stat F·[] S·0B[] Sc·[]
+14:39:43.037440 db@open opening
+14:39:43.037471 journal@recovery F·1
+14:39:43.037751 journal@recovery recovering @8
+14:39:43.038037 version@stat F·[] S·0B[] Sc·[]
+14:39:43.042797 db@janitor F·2 G·0
+14:39:43.042816 db@open done T·5.369606ms

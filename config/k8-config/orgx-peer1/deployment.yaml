@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orgx-peer1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: orgx-peer1
+  template:
+    metadata:
+      labels:
+        deployment: orgx-peer1
+        service: orgx-peer1
+        general: all-peers
+    spec:
+      containers:
+        - name: orgx-peer1-container
+          image: hyperledger/fabric-peer
+          env:
+            - name: FABRIC_CFG_PATH
+              value: "/tmp/hyperledger/orgx-peer1/config"
+          volumeMounts:
+            - mountPath: "/tmp/hyperledger/orgx-peer1/"
+              name: orgx-peer1-volume
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - |
+                    sleep 30s &&
+                    apt update &&
+                    apt install -y jq
+                    chmod +777 /tmp/hyperledger/orgx-peer1/config/builder/bin/*
+        - name: orgx-peer1-grpc-automation-container
+          image: pedrosilvamnchunks/peer-grpc:latest
+          env:
+            - name: FABRIC_CFG_PATH
+              value: "/tmp/hyperledger/orgx-peer1/config"
+          volumeMounts:
+            - mountPath: "/tmp/hyperledger/orgx-peer1"
+              name: orgx-peer1-volume
+      volumes:
+        - name: orgx-peer1-volume
+          persistentVolumeClaim:
+            claimName: pvc-orgx-peer1

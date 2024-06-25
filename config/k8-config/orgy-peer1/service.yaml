@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orgy-peer1
+spec:
+  selector:
+    service: orgy-peer1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7777
+      name: tcp
+      nodePort: 30017
+    - protocol: TCP
+      name: tcp-grpc-automation-project
+      port: 82
+      targetPort: 2000
+      nodePort: 30047
+    - protocol:  TCP
+      name: operations
+      port: 83
+      targetPort: 9008
+      nodePort: 30061
+  type: NodePort

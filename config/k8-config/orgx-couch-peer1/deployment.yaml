@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orgx-couch-peer1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: orgx-couch-peer1
+  template:
+    metadata:
+      labels:
+        deployment: orgx-couch-peer1
+        service: orgx-couch-peer1
+    spec:
+      containers:
+        - name: orgx-couch-peer1-container
+          image: couchdb
+          env:
+            - name: COUCHDB_BIND_ADDRESS
+              value: "0.0.0.0"
+            - name: COUCHDB_USER
+              value: admin
+            - name: COUCHDB_PASSWORD
+              value: "12341234"
+          volumeMounts:
+            - mountPath: "/opt/couchdb/data"
+              name: orgx-couch-peer1-volume
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - |
+                    sleep 30 &&
+                    curl -X PUT http://admin:12341234@localhost:5984/_users &&
+                    curl -X PUT http://admin:12341234@localhost:5984/_replicator &&
+                    curl -X PUT http://admin:12341234@localhost:5984/_global_changes
+      volumes:
+        - name: orgx-couch-peer1-volume
+          persistentVolumeClaim:
+            claimName: pvc-orgx-couch-peer1

@@ -10,7 +10,7 @@ export couchCN
 cp -r ../template/peer ./temp/$CN
 
 #? Put the core.yaml in the correct directory
-cp -r ../config/yaml-hlf-files/$CN/core.yaml ./temp/$CN/config/.
+cp -r ../config/$MACHINE_IP/$CN/core.yaml ./temp/$CN/config/.
 
 #? Put the msp in the correct directory
 cp -r ../crypto/$MACHINE_IP/msp/$CN/* ./temp/$CN/msp/.

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orgy-peer1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: orgy-peer1
+  template:
+    metadata:
+      labels:
+        deployment: orgy-peer1
+        service: orgy-peer1
+        general: all-peers
+    spec:
+      containers:
+        - name: orgy-peer1-container
+          image: hyperledger/fabric-peer
+          env:
+            - name: FABRIC_CFG_PATH
+              value: "/tmp/hyperledger/orgy-peer1/config"
+          volumeMounts:
+            - mountPath: "/tmp/hyperledger/orgy-peer1/"
+              name: orgy-peer1-volume
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - |
+                    sleep 30s &&
+                    apt update &&
+                    apt install -y jq
+                    chmod +777 /tmp/hyperledger/orgy-peer1/config/builder/bin/*
+        - name: orgy-peer1-grpc-automation-container
+          image: pedrosilvamnchunks/peer-grpc:latest
+          env:
+            - name: FABRIC_CFG_PATH
+              value: "/tmp/hyperledger/orgy-peer1/config"
+          volumeMounts:
+            - mountPath: "/tmp/hyperledger/orgy-peer1"
+              name: orgy-peer1-volume
+      volumes:
+        - name: orgy-peer1-volume
+          persistentVolumeClaim:
+            claimName: pvc-orgy-peer1

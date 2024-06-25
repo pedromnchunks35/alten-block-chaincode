@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-orgy-couch-peer1
+  labels:
+    volume: orgy-couch-peer1
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: /run/media/pedromn35/disk2-home/projects/block-alten/config/storage/orgy-couch-peer1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - archlinux
