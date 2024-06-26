@@ -35,3 +35,8 @@ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address
 # Configs you must do
 - Since you prob are running this in another machine you should change the pv's (the volume and the name of the node for the nodeaffinity to match) inside of each config file in the k8-config section
 - Also ca's and tls-ca's require their volume to be changed
+# About the volume config
+- In the kubeadm its your normal path but in the rancher desktop it uses reverse sftp
+- To find the volume in rancher desktop just use `rdctl shell` and find the correct path
+  - In my case is `/mnt/c/Users/psousaesilva/Documents/blockchain-identity-project/config/storage/`
+- We built a script for changing it for us.. we just need to install the `yq` binary
