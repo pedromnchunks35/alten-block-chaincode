@@ -1,0 +1,6 @@
+/config/storage/org*-peer*/data-vault/*
+/config/storage/org*-peer*/snapshots/*
+/config/storage/org*-orderer/etcdraft-wal/*
+/config/storage/org*-orderer/ledger-vault/*
+/config/storage/org*-orderer/snapshot/*
+/config/storage/org*-couch-peer*/*

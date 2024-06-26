@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: orgx-peer1-container
-          image: hyperledger/fabric-peer
+          image: hyperledger/fabric-peer:2.5
           env:
             - name: FABRIC_CFG_PATH
               value: "/tmp/hyperledger/orgx-peer1/config"

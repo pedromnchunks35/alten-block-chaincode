@@ -22,4 +22,4 @@ spec:
       volumes:
         - name: ca-volume
           hostPath:
-            path: /run/media/pedromn35/disk2-home/projects/block-alten/config/storage/ca
+            path: /mnt/c/Users/psousaesilva/Documents/blockchain-identity-project/config/storage/ca
