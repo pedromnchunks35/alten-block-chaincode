@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.myexamples.serverstream";
+option java_outer_classname = "ServerStreamOwn";
+option objc_class_prefix = "HLW";
+package serverstream;
+service ServerStream{
+    rpc requestThrowOfNumbers (ReqServerStream) returns (stream ReplyServerStream) {}
+}
+message ReqServerStream{
+    string message = 1;
+}
+message ReplyServerStream{
+    uint32 number = 1;
+}

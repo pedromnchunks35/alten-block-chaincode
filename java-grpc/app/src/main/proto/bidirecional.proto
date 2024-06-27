@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.myexamples.bidirecional";
+option java_outer_classname = "BidirecionalStreamOwn";
+option objc_class_prefix = "HLW";
+package bidirecionalstream;
+service BidirecionalStream{
+    rpc throwNumbersToEachOther (stream ReqBidirecional) returns (stream ReplyBidirecional) {}
+}
+message ReqBidirecional{
+    string number = 1;
+}
+message ReplyBidirecional{
+    uint32 number = 1;
+}
