@@ -1,4 +1,4 @@
-package runner;
+package runners;
 
 import clientImpl.ClientImpl;
 import io.grpc.Grpc;
