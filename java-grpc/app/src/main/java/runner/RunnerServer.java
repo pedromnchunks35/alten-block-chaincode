@@ -8,14 +8,15 @@ import io.grpc.Server;
 import serverImpl.*;
 import io.grpc.services.AdminInterface;
 
-public class Runner {
+public class RunnerServer {
     public static void main(String[] args) throws IOException, InterruptedException {
+        //? Simply create a server
         final Server server = Grpc.newServerBuilderForPort(2000, InsecureServerCredentials.create())
                 .addService(new ServerImpl())
                 .addServices(AdminInterface.getStandardServices())
                 .build()
                 .start();
-        System.out.println("Hello world");
+        System.out.println("Running the server in localhost:2000");
         server.awaitTermination();
     }
 }
