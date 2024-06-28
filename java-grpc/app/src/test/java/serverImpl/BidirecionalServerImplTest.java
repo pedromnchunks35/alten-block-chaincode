@@ -1,9 +1,16 @@
 package serverImpl;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -13,67 +20,83 @@ import io.grpc.Server;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.myexamples.bidirecional.BidirecionalStreamGrpc;
-import io.grpc.myexamples.bidirecional.ReplyBidirecional;
 import io.grpc.myexamples.bidirecional.BidirecionalStreamGrpc.BidirecionalStreamStub;
+import io.grpc.myexamples.bidirecional.ReplyBidirecional;
+import io.grpc.myexamples.bidirecional.ReqBidirecional;
 import io.grpc.stub.StreamObserver;
 import io.grpc.testing.GrpcCleanupRule;
-import java.util.concurrent.atomic.*;
-import java.util.logging.*;
 
 @RunWith(JUnit4.class)
 public class BidirecionalServerImplTest {
-    GrpcCleanupRule cleanup = new GrpcCleanupRule();
-    Server server;
-    ManagedChannel channel;
+
+    @Rule
+    public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
+    private Server server;
+    private ManagedChannel channel;
     private static final Logger logger = Logger.getLogger(BidirecionalServerImplTest.class.getName());
+    private CountDownLatch latch;
 
     @Before
     public void setUp() throws IOException {
-        String server_name = InProcessServerBuilder.generateName();
-        server = cleanup.register(
+        String serverName = InProcessServerBuilder.generateName();
+        server = grpcCleanup.register(
                 InProcessServerBuilder
-                        .forName(server_name)
+                        .forName(serverName)
                         .directExecutor()
                         .addService(new BidirecionalServerImpl())
                         .build()
                         .start());
-        channel = cleanup.register(
-                InProcessChannelBuilder.forName(server_name)
+        channel = grpcCleanup.register(
+                InProcessChannelBuilder.forName(serverName)
                         .directExecutor()
                         .build());
+        latch = new CountDownLatch(1);
     }
 
     @After
     public void clean() {
-        server.shutdown();
-        channel.shutdown();
+        if (server != null) {
+            server.shutdown();
+        }
+        if (channel != null) {
+            channel.shutdown();
+        }
     }
 
     @Test
-    public void sendNumbersToEachOther_test() {
+    public void throwNumberToEachOther_test() throws InterruptedException {
         BidirecionalStreamStub asyncStub = BidirecionalStreamGrpc.newStub(channel);
-        AtomicInteger number_of_numbers = new AtomicInteger(0);
-        
-        new StreamObserver<ReplyBidirecional>() {
+        AtomicInteger numberOfNumbers = new AtomicInteger(0);
+        StreamObserver<ReplyBidirecional> reply = new StreamObserver<ReplyBidirecional>() {
 
             @Override
             public void onNext(ReplyBidirecional value) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'onNext'");
+                numberOfNumbers.incrementAndGet();
             }
 
             @Override
             public void onError(Throwable t) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'onError'");
+                logger.warning("Error while receiving the data: " + t.getMessage());
+                latch.countDown();
             }
 
             @Override
             public void onCompleted() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'onCompleted'");
+                logger.info("Done receiving all of the data");
+                latch.countDown();
             }
 
         };
+        StreamObserver<ReqBidirecional> req = asyncStub.throwNumbersToEachOther(reply);
+        for (int i = 0; i < 5; i++) {
+            req.onNext(ReqBidirecional.newBuilder()
+                    .setNumber("Hello")
+                    .build());
+        }
+        req.onCompleted();
+        if (!latch.await(1, TimeUnit.MINUTES)) {
+            logger.warning("We cannot be here waiting more than 1 minute");
+        }
+        assertEquals(5, numberOfNumbers.get());
     }
 }
