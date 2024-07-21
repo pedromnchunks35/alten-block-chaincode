@@ -5,16 +5,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Calendar;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.annotation.Contract;
 import org.hyperledger.fabric.contract.annotation.Default;
 import org.hyperledger.fabric.contract.annotation.Transaction;
+import org.json.JSONObject;
 
 import chaincode.data.BiometricsData;
 import chaincode.data.BiometricsDataInterface;
+import chaincode.data.TicketDTO;
 import chaincode.exceptions.InvalidCertificate;
 import chaincode.exceptions.InvalidInputException;
 import chaincode.exceptions.UserAlreadyExistsException;
@@ -79,6 +92,26 @@ public class OurContract implements OurContractInterface {
         oos.writeObject(data.getTable());
         byte[] bytes = baos.toByteArray();
         ctx.getStub().putState(data.getUsername(), bytes);
+    }
+
+    @Transaction
+    @Override
+    public String requestTicket(Context ctx, String username)
+            throws IOException, InvalidCertificate, InvalidKeySpecException, NoSuchAlgorithmException,
+            InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
+        byte[] publicKeyBytes = Files.readAllBytes(Path.of("./src/main/java/chaincode/keypairs/public.pem"));
+        String publicKeyString = Cert.byteArrayToString(publicKeyBytes);
+        boolean isItValidPublicKey = Cert.isItValidPublicKey(publicKeyString);
+        if (!isItValidPublicKey) {
+            throw new InvalidCertificate("public key");
+        }
+        String publicKeyWithoutHeaders = Cert.removeX509Headers(publicKeyString);
+        PublicKey publicKeyNative = Cert.getPublicKeyFromKeyWithNoHeaders(publicKeyWithoutHeaders);
+        TicketDTO ticket = new TicketDTO();
+        Cert.generateTicketDTO(ticket, Calendar.getInstance());
+        JSONObject ticketJson = Cert.ticketDTOtoJsonObject(ticket, username);
+        String encrypted = Cert.encryptTicket(ticketJson.toString(), publicKeyNative);
+        return encrypted;
     }
 
 }
